@@ -1,0 +1,61 @@
+service: caverna-menubot
+
+custom:
+  targetBucketName: caverna-menus
+  targetSlackChannel: '#cavernamenu'
+  chrome:
+    flags:
+      - --window-size=1280x1696 # Letter size
+      - --hide-scrollbars
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: eu-west-1
+  environment:
+    DEBUG: "*"
+    PAGE_LOAD_TIMEOUT: 20000
+    LOGGING: true
+    SLACK_TOKEN: ${file(./slack.yml):ApiToken}
+    TARGET_BUCKET_NAME: ${self:custom.targetBucketName}
+    TARGET_SLACK_CHANNEL: ${self:custom.targetSlackChannel}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::${self:custom.targetBucketName}/*"
+
+plugins:
+  - serverless-plugin-chrome
+  - serverless-webpack
+
+functions:
+  screenshot:
+    description: Takes picture of Caverna menu
+    memorySize: 1536
+    timeout: 30
+    handler: src/handlers/screenshot.default
+    events:
+      - http:
+          path: screenshot
+          method: get
+      - schedule: cron(30 8 * * ? *) # Every day, 10:30. Just before lunch time.
+
+  slack:
+    description: Post menu to slack
+    memorySize: 128
+    timeout: 10
+    handler: src/handlers/slack.default
+    events:
+      - s3:
+          bucket: ${self:custom.targetBucketName}
+          event: s3:ObjectCreated:*
+
+# Uncomment when deploying the first time to create required buckets
+# resources:
+#   Resources:
+#     NewResource:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: ${self:custom.targetBucketName}
