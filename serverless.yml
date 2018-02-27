@@ -40,7 +40,7 @@ functions:
       - http:
           path: screenshot
           method: get
-      - schedule: cron(30 8 * * ? *) # Every day, 10:30. Just before lunch time.
+      - schedule: cron(30 8 ? * 2-6 *) # Mon-Fri, 10:30. Just before lunch time.
 
   slack:
     description: Post menu to slack
