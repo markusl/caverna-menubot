@@ -17,7 +17,6 @@ module.exports = {
           cacheDirectory: true,
         },
       },
-      { test: /\.json$/, loader: 'json-loader' },
     ],
   },
   resolve: {
@@ -29,10 +28,5 @@ module.exports = {
     filename: '[name].js',
   },
   externals: ['aws-sdk'],
-  plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
-    }),
-  ],
   entry: slsw.lib.entries,
 }

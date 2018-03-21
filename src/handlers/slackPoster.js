@@ -3,6 +3,8 @@ import Slack from 'slack';
 
 export default async function handler (event, context, callback) {
   try {
+    log('Starting slack post');
+    log(context);
     log(event.Records[0].s3);
     const s3 = event.Records[0].s3;
     const url = 'https://' + s3.bucket.name + '.s3.eu-west-1.amazonaws.com/' + s3.object.key;

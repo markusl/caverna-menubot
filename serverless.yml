@@ -46,8 +46,11 @@ functions:
     description: Post menu to slack
     memorySize: 128
     timeout: 10
-    handler: src/handlers/slack.default
+    handler: src/handlers/slackPoster.default
     events:
+      - http:
+          path: slack
+          method: get
       - s3:
           bucket: ${self:custom.targetBucketName}
           event: s3:ObjectCreated:*
