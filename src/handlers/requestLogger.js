@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import Cdp from 'chrome-remote-interface'
+const Cdp = require('chrome-remote-interface');
 
-const LOAD_TIMEOUT = 1000 * 30
+const LOAD_TIMEOUT = 1000 * 30;
 
-export default async function handler (event, context, callback) {
+module.exports.default = async function handler (event, context, callback) {
   const {
     queryStringParameters: { url = 'https://github.com/adieuadieu/serverless-chrome' },
   } = event

@@ -4,7 +4,6 @@ A slack bot that uses serverless chrome in AWS lambda to fetch a screenshot of C
 
 First version was adapted from Marco Lüthy's template https://github.com/adieuadieu/serverless-chrome/tree/master/examples/serverless-framework/aws
 
-
 ## Deployment
 
 First, create file `slack.yml` that contains needed API token.

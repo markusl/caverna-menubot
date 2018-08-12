@@ -2,3 +2,4 @@ node_modules
 slack.yml
 .serverless
 package-lock.json
+.vscode

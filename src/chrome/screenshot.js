@@ -1,8 +1,8 @@
-import Cdp from 'chrome-remote-interface'
-import log from '../utils/log'
-import sleep from '../utils/sleep'
+const Cdp = require('chrome-remote-interface');
+const log = require('../utils/log');
+const sleep = require('../utils/sleep');
 
-export default async function captureScreenshotOfUrl (url, clip = null, mobile = false) {
+module.exports = async function captureScreenshotOfUrl (url, clip, mobile = false) {
   const LOAD_TIMEOUT = process.env.PAGE_LOAD_TIMEOUT || 1000 * 60
 
   let result
@@ -16,11 +16,12 @@ export default async function captureScreenshotOfUrl (url, clip = null, mobile =
   }
 
   const [tab] = await Cdp.List()
+  console.log('Opened tab', tab);
   const client = await Cdp({ host: '127.0.0.1', target: tab })
 
   const {
     Network, Page, Runtime, Emulation,
-  } = client
+  } = client;
 
   Network.requestWillBeSent((params) => {
     log('Chrome is sending request for:', params.request.url)
@@ -28,10 +29,10 @@ export default async function captureScreenshotOfUrl (url, clip = null, mobile =
 
   Page.loadEventFired(() => {
     loaded = true
-  })
+  });
 
   try {
-    await Promise.all([Network.enable(), Page.enable()])
+    await Promise.all([Network.enable(), Page.enable()]);
 
     if (mobile) {
       await Network.setUserAgentOverride({
@@ -49,9 +50,11 @@ export default async function captureScreenshotOfUrl (url, clip = null, mobile =
       height: 0,
     })
 
-    await Page.navigate({ url })
-    await Page.loadEventFired()
-    await loading()
+    log(`Navigate to ${url}`);
+    await Page.navigate({ url });
+    await Page.loadEventFired();
+    log(`Waiting to load ${url}`);
+    await loading();
 
     const { result: { value: { height } } } = await Runtime.evaluate({
       expression: `(
@@ -70,17 +73,19 @@ export default async function captureScreenshotOfUrl (url, clip = null, mobile =
       height,
     })
 
+    log(`Capturing the screenshot of ${url}`);
     const screenshot = await Page.captureScreenshot({
       format: 'png',
       clip: clip,
-    })
+    });
+    log('Screenshot captured', screenshot);
 
-    result = screenshot.data
+    result = screenshot.data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 
-  await client.close()
+  await client.close();
 
-  return result
+  return result;
 }

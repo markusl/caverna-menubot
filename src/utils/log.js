@@ -1,4 +1,4 @@
-export default function log (...stuffToLog) {
+module.exports = function log (...stuffToLog) {
   if (process.env.LOGGING) {
     console.log(...stuffToLog)
   }

@@ -2,7 +2,8 @@ service: caverna-menubot
 
 custom:
   targetBucketName: caverna-menus
-  targetSlackChannel: '#cavernamenu'
+  targetSlackChannel: '#menu-caverna'
+  targetSiteUrl: https://caverna.fi/lounas/
   chrome:
     flags:
       - --window-size=1280x1696 # Letter size
@@ -10,7 +11,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: dev
   region: eu-west-1
   environment:
@@ -18,17 +19,18 @@ provider:
     PAGE_LOAD_TIMEOUT: 20000
     LOGGING: true
     SLACK_TOKEN: ${file(./slack.yml):ApiToken}
+    TARGET_SITE_URL: ${self:custom.targetSiteUrl}
     TARGET_BUCKET_NAME: ${self:custom.targetBucketName}
     TARGET_SLACK_CHANNEL: ${self:custom.targetSlackChannel}
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:*
+        - s3:PutObject
+        - s3:PutObjectAcl
       Resource: "arn:aws:s3:::${self:custom.targetBucketName}/*"
 
 plugins:
   - serverless-plugin-chrome
-  - serverless-webpack
 
 functions:
   screenshot:
