@@ -2,15 +2,14 @@ const Cdp = require('chrome-remote-interface');
 const log = require('../utils/log');
 const sleep = require('../utils/sleep');
 
-module.exports = async function captureScreenshotOfUrl (url, clip, mobile = false) {
+module.exports = async function captureScreenshotOfUrl (url, clip) {
   const LOAD_TIMEOUT = process.env.PAGE_LOAD_TIMEOUT || 1000 * 60
 
-  let result
-  let loaded = false
+  let loaded = false;
 
   const loading = async (startTime = Date.now()) => {
     if (!loaded && Date.now() - startTime < LOAD_TIMEOUT) {
-      await sleep(100)
+      await sleep(50)
       await loading(startTime)
     }
   }
@@ -34,20 +33,13 @@ module.exports = async function captureScreenshotOfUrl (url, clip, mobile = fals
   try {
     await Promise.all([Network.enable(), Page.enable()]);
 
-    if (mobile) {
-      await Network.setUserAgentOverride({
-        userAgent:
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A403 Safari/602.1',
-      })
-    }
-
     await Emulation.setDeviceMetricsOverride({
-      mobile: !!mobile,
+      mobile: false,
       deviceScaleFactor: 0,
-      scale: 1, // mobile ? 2 : 1,
+      scale: 1,
       fitWindow: false,
-      width: mobile ? 375 : 1280,
-      height: 0,
+      width: 1280,
+      height: 2000,
     })
 
     log(`Navigate to ${url}`);
@@ -62,30 +54,32 @@ module.exports = async function captureScreenshotOfUrl (url, clip, mobile = fals
       )();
       `,
       returnByValue: true,
-    })
+    });
+
+    log(`Page loaded with height ${height}`);
 
     await Emulation.setDeviceMetricsOverride({
-      mobile: !!mobile,
+      mobile: false,
       deviceScaleFactor: 0,
-      scale: 1, // mobile ? 2 : 1,
+      scale: 1,
       fitWindow: false,
-      width: mobile ? 375 : 1280,
+      width: 1280,
       height,
-    })
+    });
+
+    await Emulation.setVisibleSize({ width: 1280, height });
 
     log(`Capturing the screenshot of ${url}`);
     const screenshot = await Page.captureScreenshot({
-      format: 'png',
+      format: 'jpeg',
       clip: clip,
     });
     log('Screenshot captured', screenshot);
 
-    result = screenshot.data;
+    return screenshot.data;
   } catch (error) {
     console.error(error);
+  } finally {
+    await client.close();
   }
-
-  await client.close();
-
-  return result;
 }

@@ -4,15 +4,14 @@ const AWS = require('aws-sdk');
 
 module.exports.default = async function handler (event, context, callback) {
   const url = process.env.TARGET_SITE_URL;
-  const mobile = false;
-  const clip = { x: 215, y: 480, width: 860, height: 920, scale: 1 };
+  const clip = { x: 215, y: 550, width: 370, height: 620, scale: 1 };
 
   log('Processing screenshot capture for', url);
 
   const startTime = Date.now();
 
   try {
-    const data = await captureScreenshotOfUrl(url, clip, mobile);
+    const data = await captureScreenshotOfUrl(url, clip);
     
     log(`Chromium took ${Date.now() - startTime}ms to load URL and capture screenshot.`);
 
@@ -20,7 +19,7 @@ module.exports.default = async function handler (event, context, callback) {
     const s3bucket = new AWS.S3({params: {Bucket: bucket}});
     const params = {
       ACL: 'public-read',
-      Key: `menu-${Date.now()}.png`,
+      Key: `menu-${Date.now()}.jpg`,
       Body: Buffer.from(data, 'base64'),
     };
     const result = await s3bucket.upload(params).promise();
