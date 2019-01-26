@@ -1,7 +1,7 @@
 {
   "name": "caverna-menubot",
   "private": true,
-  "version": "1.9.0",
+  "version": "2.0.0",
   "description": "Posts the daily Caverna restaurant menu to a slack channel",
   "main": "src/handlers.js",
   "engines": {
@@ -25,15 +25,15 @@
   "author": "Markus Lindqvist",
   "license": "MIT",
   "dependencies": {
-    "@serverless-chrome/lambda": "^1.0.0-54",
-    "chrome-remote-interface": "0.26.1",
+    "@serverless-chrome/lambda": "^1.0.0-55",
+    "chrome-remote-interface": "0.27.0",
     "slack": "^11.0.1"
   },
   "devDependencies": {
-    "eslint": "^5.3.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-node": "^7.0.1",
-    "serverless": "1.30.0",
-    "serverless-plugin-chrome": "1.0.0-54"
+    "eslint": "^5.12.1",
+    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-node": "^8.0.1",
+    "serverless": "1.36.3",
+    "serverless-plugin-chrome": "1.0.0-55"
   }
 }
