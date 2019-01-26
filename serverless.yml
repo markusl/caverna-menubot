@@ -15,7 +15,6 @@ provider:
   stage: dev
   region: eu-west-1
   environment:
-    DEBUG: "*"
     PAGE_LOAD_TIMEOUT: 20000
     LOGGING: true
     SLACK_TOKEN: ${file(./slack.yml):ApiToken}
