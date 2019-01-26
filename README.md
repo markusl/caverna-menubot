@@ -2,14 +2,14 @@
 
 A slack bot that uses serverless chrome in AWS lambda to fetch a screenshot of Caverna menu and posts it to a slack channel.
 
-First version was adapted from Marco Lüthy's template https://github.com/adieuadieu/serverless-chrome/tree/master/examples/serverless-framework/aws
+First version was adapted from Marco Lüthy's template <https://github.com/adieuadieu/serverless-chrome/tree/master/examples/serverless-framework/aws>
 
 ## Deployment
 
-First, create file `slack.yml` that contains needed API token.
+First, create file `slack.yml` that contains a webhook url.
 
 ```yaml
-ApiToken: xxx-xxxxxxxxxx-yyyyyyyyyyyyyy
+WebhookUrl: https://hooks.slack.com/services/XXXXYYYYZZZZ
 ```
 
 Once Credentials are set up, to deploy the full service run:
