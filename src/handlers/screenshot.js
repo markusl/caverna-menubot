@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 
 module.exports.default = async function handler (event, context, callback) {
   const url = process.env.TARGET_SITE_URL;
-  const clip = { x: 215, y: 550, width: 370, height: 620, scale: 1 };
+  const clip = { x: 210, y: 550, width: 380, height: 650, scale: 1 };
 
   log('Processing screenshot capture for', url);
 
