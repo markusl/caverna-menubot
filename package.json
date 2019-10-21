@@ -5,7 +5,7 @@
   "description": "Posts the daily Caverna restaurant menu to a slack channel",
   "main": "src/handlers.js",
   "engines": {
-    "node": ">= 8.10.0"
+    "node": ">= 10.0.0"
   },
   "config": {
     "jsSrc": "src/",
@@ -26,14 +26,14 @@
   "license": "MIT",
   "dependencies": {
     "@serverless-chrome/lambda": "^1.0.0-55",
-    "@slack/client": "^4.8.0",
-    "chrome-remote-interface": "0.27.0"
+    "@slack/client": "^5.0.2",
+    "chrome-remote-interface": "0.28.0"
   },
   "devDependencies": {
-    "eslint": "^5.12.1",
-    "eslint-plugin-import": "^2.15.0",
-    "eslint-plugin-node": "^8.0.1",
-    "serverless": "1.36.3",
+    "eslint": "^6.5.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "serverless": "1.54.0",
     "serverless-plugin-chrome": "1.0.0-55"
   }
 }
